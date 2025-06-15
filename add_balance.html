@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Balance</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .qr-box {
+      margin-top: 20px;
+      background: #1a0d40;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    #qr {
+      margin: 10px auto;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    #timer {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #ffcc00;
+    }
+  </style>
+</head>
+<body class="login-body">
+  <div class="login-container" id="formBox">
+    <h2>Add Balance</h2>
+    <input type="number" id="amount" placeholder="Enter Amount (₹)">
+    <button onclick="showQR()">Proceed</button><br><br>
+    <a href="dashboard.html" style="color:#fff">⬅️ Back to Dashboard</a>
+  </div>
+
+  <div class="login-container qr-box" id="qrBox" style="display:none;">
+    <h3>Scan to Pay</h3>
+    <div id="qr">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=demo@upi&pn=Xmedia%20Panel&am=100" alt="QR Code">
+    </div>
+    <div id="timer">Time left: 04:59</div>
+    <br>
+    
+  </div>
+
+  <script>
+    function showQR() {
+      const amt = document.getElementById('amount').value;
+      if (!amt || amt <= 0) {
+        alert("Enter valid amount");
+        return;
+      }
+      const qrImg = document.querySelector("#qr img");
+      qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=demo@upi&pn=Xmedia%20Panel&am=" + amt;
+
+      document.getElementById("formBox").style.display = "none";
+      document.getElementById("qrBox").style.display = "block";
+
+      startTimer(4 * 60 + 59); // 4 minutes 59 seconds
+    }
+
+    function startTimer(duration) {
+      let timer = duration, minutes, seconds;
+      const timerEl = document.getElementById('timer');
+      const countdown = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+        timerEl.textContent = "Time left: " + (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                              (seconds < 10 ? "0" + seconds : seconds);
+
+        if (--timer < 0) {
+          clearInterval(countdown);
+          timerEl.textContent = "QR Code Expired!";
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

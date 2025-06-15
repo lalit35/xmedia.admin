@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Xmedia - Order Followers</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+    .camera-box {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+    video, canvas {
+      border-radius: 8px;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 300px;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main-panel {
+        margin-left: 0;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Xmedia</h2>
+    <a href="dashboard.html">👥 Order Followers</a>
+    <a href="add_balance.html">💰 Add Balance</a>
+    <a href="index.html">🔓 Logout</a>
+  </div>
+
+  <div class="main-panel">
+    <div class="top-header">
+      <div class="user-box"><strong>lakshaybhadre</strong></div>
+      <div class="balance-box">
+        ₹0.5223<br>
+        <a href="add_balance.html">Add Balance</a>
+      </div>
+    </div>
+
+    <div class="notice">🔥 Order 100K Instagram Followers for just ₹639!</div>
+
+    <div class="order-box">
+      <h3>100K Followers Order</h3>
+      <label>Instagram Profile Link</label><br>
+      <input type="text" id="profileLink" placeholder="https://instagram.com/username"><br><br>
+
+      <label>Package</label><br>
+      <select>
+        <option selected>100K Followers – ₹639</option>
+      </select><br><br>
+
+      <button onclick="requestID()">Place Order</button>
+
+      <div class="camera-box" id="cameraBox">
+        <h4>📷 Submit ID Proof to Proceed</h4>
+        <video id="video" autoplay></video><br>
+        <button onclick="captureID()">Capture ID</button><br>
+        <canvas id="canvas" width="240" height="180" style="display:none;"></canvas>
+        <br><br>
+        <button id="finalOrderBtn" onclick="finishOrder()" style="display:none;">Submit Order</button>
+        <p id="submitMsg" style="color:lightgreen; display:none;">ID Captured ✅</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let idCaptured = false;
+
+    function requestID() {
+      document.getElementById("cameraBox").style.display = "block";
+      const video = document.getElementById('video');
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          video.srcObject = stream;
+        })
+        .catch(err => {
+          alert("Camera access denied: " + err.message);
+        });
+    }
+
+    function captureID() {
+      const canvas = document.getElementById('canvas');
+      const video = document.getElementById('video');
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas.style.display = 'block';
+      idCaptured = true;
+      document.getElementById('submitMsg').style.display = 'block';
+      document.getElementById('finalOrderBtn').style.display = 'inline-block';
+    }
+
+    
+    function finishOrder() {
+      const profileLink = document.getElementById("profileLink").value.trim();
+      if (!profileLink) {
+        alert("Please enter a valid Instagram profile link.");
+        return;
+      }
+      
+      if (!idCaptured) {
+        alert("Please capture ID proof to proceed.");
+        return;
+      }
+      alert("Order placed successfully for: " + profileLink);
+      window.location.href = "dashboard.html";
+    }
+  </script>
+</body>
+</html>
