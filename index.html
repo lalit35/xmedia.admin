@@ -15,12 +15,17 @@
 
   <script>
     function login() {
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
-      if(user && pass) {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+
+      // Set your admin credentials here
+      const correctUser = "admin";
+      const correctPass = "Sumit@123";
+
+      if (user === correctUser && pass === correctPass) {
         window.location.href = 'dashboard.html';
       } else {
-        alert("Please enter login info");
+        alert("Incorrect username or password!");
       }
     }
   </script>
